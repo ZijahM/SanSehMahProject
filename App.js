@@ -1,33 +1,79 @@
-import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
-import TeamScreen from './components/TeamScreen';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import AddNote from './components/AddNote';
-import NotesScreen from './components/NotesScreen';
-import Register from './components/Register';
-import Login from './components/Login';
+import * as React from 'react';
+import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import { SplashScreen } from 'expo';
+import * as Font from 'expo-font';
+import { Ionicons } from '@expo/vector-icons';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 
+import BottomTabNavigator from './navigation/BottomTabNavigator';
+import useLinking from './navigation/useLinking';
+import LoginScreen from './screens/LoginScreen';
+import RegisterScreen from './screens/RegisterScreen';
+import TeamScreen from './screens/TeamScreen';
+import NotesScreen from './screens/NotesScreen';
+import AddNote from './screens/AddNote';
 
-export default function App() {
-  const [goalReached, setGoalReached] = useState(false);
-  return (
-    <View style={styles.container}>
-      <div>
-        <TeamScreen/>
-        <AddNote/>
-        <NotesScreen/>
-        <Register/>
-        <Login/>
-      </div>
-    </View>
-  );
+const Stack = createStackNavigator();
+
+export default function App(props) {
+  const [isLoadingComplete, setLoadingComplete] = React.useState(false);
+  const [initialNavigationState, setInitialNavigationState] = React.useState();
+  const containerRef = React.useRef();
+  const { getInitialState } = useLinking(containerRef);
+
+  // Load any resources or data that we need prior to rendering the app
+  React.useEffect(() => {
+    async function loadResourcesAndDataAsync() {
+      try {
+        SplashScreen.preventAutoHide();
+
+        // Load our initial navigation state
+        setInitialNavigationState(await getInitialState());
+
+        // Load fonts
+        await Font.loadAsync({
+          ...Ionicons.font,
+          'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
+        });
+      } catch (e) {
+        // We might want to provide this error information to an error reporting service
+        console.warn(e);
+      } finally {
+        setLoadingComplete(true);
+        SplashScreen.hide();
+      }
+    }
+
+    loadResourcesAndDataAsync();
+  }, []);
+
+  if (!isLoadingComplete && !props.skipLoadingScreen) {
+    return null;
+  } else {
+    return (
+      <View style={styles.container}>
+        {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+        <NavigationContainer ref={containerRef} 
+        // initialState={initialNavigationState}
+        >
+          <Stack.Navigator initialRouteName="Login">
+            <Stack.Screen name="Login" component={LoginScreen} />
+            <Stack.Screen name="Register" component={RegisterScreen} />
+            <Stack.Screen name="Notes" component={NotesScreen} />
+            <Stack.Screen name="Teams" component={TeamScreen} />
+            <Stack.Screen name="Bottom" component={BottomTabNavigator} />
+            <Stack.Screen name="AddNote" component={AddNote} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center'
-  }
+  },
 });
