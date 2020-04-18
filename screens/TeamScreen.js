@@ -18,15 +18,16 @@ function TeamScreen ({navigation}) {
         bottomDivider
         chevron
         onPress={() => navigation.navigate("Notes", {
+          teamName: team.title,
         })}
       />
      )
     return (
-        <div>
+        <View style={{marginTop:"30%"}}>
         {
             teamList
         }
-        </div>
+        </View>
         // <View><b>Teams</b>
         // </View>
     )

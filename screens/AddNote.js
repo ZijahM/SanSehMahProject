@@ -1,29 +1,54 @@
-import React from 'react';
+import React, {useState} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+} from 'react-native';
 
+const AddNote = ({addNote}) => {
+  const [text, setText] = useState('');
+  const onChange = textValue => setText(textValue);
 
-export default class AddNote extends React.Component {
-    constructor(props) {
-      super(props);
-      this.state = {value: ''};
-      this.handleChange = this.handleChange.bind(this);
-      this.handleSubmit = this.handleSubmit.bind(this);
-    }
-  
-    handleChange(event) {    this.setState({value: event.target.value});  }
-    handleSubmit(event) {
-      alert('A note ' + this.state.value + ' was added');
-      event.preventDefault();
-    }
-  
-    render() {
-      return (
-          <div>
-        <form onSubmit={this.handleSubmit}> 
-            <header> Add Note </header>
-            <input type="text" value={this.state.value} onChange={this.handleChange} />       
-          <input type="submit" value="Add" /> 
-        </form>
-        </div>
-      );
-    }
-  }
+  return (
+    <View>
+      <TextInput
+        placeholder="Add note..."
+        style={styles.input}
+        onChangeText={onChange}
+        value={text}
+      />
+      <TouchableOpacity
+        style={styles.btn}
+        onPress={() => {
+          addNote(text);
+          setText('');
+        }}>
+        <Text style={styles.btnText}>
+         Add Note
+        </Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  input: {
+    height: 60,
+    padding: 8,
+    margin: 5,
+  },
+  btn: {
+    backgroundColor: '#c2bad8',
+    padding: 9,
+    margin: 5,
+  },
+  btnText: {
+    color: 'darkslateblue',
+    fontSize: 20,
+    textAlign: 'center',
+  },
+});
+
+export default AddNote;
