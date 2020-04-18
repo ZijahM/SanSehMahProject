@@ -1,5 +1,5 @@
 import React from 'react'
-import { View } from 'react-native'
+import { ScrollView } from 'react-native'
 // import { ListGroup } from 'react-bootstrap';
 import { ListItem, Button } from 'react-native-elements'
 
@@ -23,11 +23,11 @@ function TeamScreen ({navigation}) {
       />
      )
     return (
-        <View style={{marginTop:"30%"}}>
+        <ScrollView style={{marginTop:"30%"}}>
         {
             teamList
         }
-        </View>
+        </ScrollView>
         // <View><b>Teams</b>
         // </View>
     )
