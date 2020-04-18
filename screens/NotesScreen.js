@@ -50,11 +50,11 @@ function NotesScreen({ navigation, route }) {
     }
   };
 
-return( <View>
+return( <ScrollView >
   <Header
   centerComponent={{ text: teamName, style: { color: '#fff' } }}
 />
-<ScrollView style={{marginTop:"30%"}}>
+<View style={{marginTop:"30%"}}>
 {
 notes.map((note) =>{
 return(
@@ -67,9 +67,9 @@ return(
 )
 })
 }
+</View>
 <AddNote addNote={addNote} />
 </ScrollView>
-</View>
 );
            
 }
