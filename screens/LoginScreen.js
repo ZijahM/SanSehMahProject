@@ -29,7 +29,7 @@ export default function LoginScreen ({navigation}) {
           style={styles.input}
           onPress={() => {
             if (username === "test" && password === "test") {
-              navigation.navigate("Teams", {
+              navigation.navigate("Root", {
               });
             } else {
               setError("Incorrect credentials.");

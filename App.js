@@ -62,7 +62,7 @@ export default function App(props) {
             <Stack.Screen name="Register" component={RegisterScreen} />
             <Stack.Screen name="Notes" component={NotesScreen} />
             <Stack.Screen name="Teams" component={TeamScreen} />
-            <Stack.Screen name="Bottom" component={BottomTabNavigator} />
+            <Stack.Screen name="Root" component={BottomTabNavigator} />
             <Stack.Screen name="AddNote" component={AddNote} />
           </Stack.Navigator>
         </NavigationContainer>
