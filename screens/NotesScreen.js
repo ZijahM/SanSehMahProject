@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import { View, ScrollView, Alert } from 'react-native'
+import { View, ScrollView, Alert, StyleSheet, Button } from 'react-native'
 // import { ListGroup } from 'react-bootstrap';
 import { ListItem, Header } from 'react-native-elements'
 import AddNote from '../screens/AddNote'
@@ -53,7 +53,16 @@ function NotesScreen({ navigation, route }) {
 return( <ScrollView >
   <Header
   centerComponent={{ text: teamName, style: { color: '#fff' } }}
-/>
+/><Button
+          title={'Add a new team member'}
+          onPress={() => {
+             {
+              navigation.navigate("AddTeamMember", {
+                teamName: teamName,
+              });
+            } 
+          }}
+        />
 <View style={{marginTop:"30%"}}>
 {
 notes.map((note) =>{
@@ -71,6 +80,7 @@ return(
 <AddNote addNote={addNote} />
 </ScrollView>
 );
+
            
 }
 export default NotesScreen;

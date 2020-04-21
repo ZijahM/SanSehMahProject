@@ -13,6 +13,7 @@ import RegisterScreen from './screens/RegisterScreen';
 import TeamScreen from './screens/TeamScreen';
 import NotesScreen from './screens/NotesScreen';
 import AddNote from './screens/AddNote';
+import AddTeamMember from './screens/AddTeamMember';
 
 const Stack = createStackNavigator();
 
@@ -64,6 +65,7 @@ export default function App(props) {
             <Stack.Screen name="Teams" component={TeamScreen} />
             <Stack.Screen name="Root" component={BottomTabNavigator} />
             <Stack.Screen name="AddNote" component={AddNote} />
+            <Stack.Screen name="AddTeamMember" component={AddTeamMember} />
           </Stack.Navigator>
         </NavigationContainer>
       </View>
