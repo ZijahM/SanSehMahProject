@@ -16,9 +16,9 @@ function TeamScreen ({navigation}) {
     const [isLoading, setLoading] = useState(true);
     const [data, setData] = useState ([]);
     useEffect(() => {
-      fetch('http://localhost:3000/dev/hello')
+      fetch('http://localhost:3000/dev/teams')
         .then((response) => response.json())
-        .then((json) => setData(json.teams))
+        .then((json) => setData(json.data))
         .catch((error) => console.error(error))
         .finally(() => setLoading(false));
     }, []);

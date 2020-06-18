@@ -1,5 +1,5 @@
-import React, {useState} from 'react'
-import { View, ScrollView, Alert, StyleSheet, Button } from 'react-native'
+import React, {useState, useEffect} from 'react'
+import { View, ScrollView, Alert, StyleSheet, Button, ActivityIndicator } from 'react-native'
 // import { ListGroup } from 'react-bootstrap';
 import { ListItem, Header } from 'react-native-elements'
 import AddNote from '../screens/AddNote'
@@ -28,8 +28,20 @@ const allNotes = [
 
 function NotesScreen({ navigation, route }) {
   const { teamName } = route.params;
-  // const [notes, setNotes] = useState(allNotes);
-  const [notes, setNotes] = useState(allNotes.filter(note => note.team == teamName));
+  const [data, setData] = useState ([]);
+  const [notes, setNotes] = useState([]);
+  const [isLoading, setLoading] = useState(true);
+  // const [notes, setNotes] = useState(allNotes.filter(note => note.team == teamName));
+
+
+  useEffect(() => {
+    fetch('http://localhost:3000/dev/notes')
+      .then((response) => response.json())
+      .then((json) => setData(json.data))
+      .then (()=>setNotes(data.filter(note => note.team == teamName)))
+      .catch((error) => console.error(error))
+      .finally(() => setLoading(false));
+      }, []);
 
    const addNote = text => {
     if (!text) {
@@ -44,16 +56,38 @@ function NotesScreen({ navigation, route }) {
         {cancelable: true},
       );
     } else {
+      fetch('http://localhost:3000/dev/notes', {
+  method: 'POST',
+  headers: {
+    Accept: 'application/json',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    team: teamName,
+    note: text
+  })
+});
       setNotes(prevNotes => {
         return [{text, teamName}, ...prevNotes];
       });
     }
   };
 
-return( <ScrollView >
+  const notesList = notes.map(note => <ListItem
+    title={note.note}
+    bottomDivider
+    chevron
+  />
+ )
+
+
+
+return(
+  <ScrollView >
   <Header
   centerComponent={{ text: teamName, style: { color: '#fff' } }}
-/><Button
+/>
+{/* <Button
           title={'Add a new team member'}
           onPress={() => {
              {
@@ -62,20 +96,45 @@ return( <ScrollView >
               });
             } 
           }}
-        />
+        /> */}
 <View style={{marginTop:"30%"}}>
-{
-notes.map((note) =>{
+<Button 
+  title="Display"
+  onPress={()=>
+setNotes(data.filter(note => note.team == teamName))
+  }
+  />
+  {/* <Button 
+  title="notes log"
+  onPress={()=>
+  console.log(notes)
+  }
+  /> */}
+
+{isLoading ? <ActivityIndicator/> : (
+        // <FlatList
+        //   data={data}
+        //   keyExtractor={({ id }, index) => id}
+        //   renderItem={({ item }) => (
+        //     <Text>{item.title}</Text>
+        //   )}
+        // />
+        notesList
+      )}
+
+
+{/* {
+data.map((note) =>{
 return(
  <View>
-     <ListItem title={note.text}
+     <ListItem title={note.team}
       bottomDivider
       chevron
       />
      </View>
 )
 })
-}
+} */}
 </View>
 <AddNote addNote={addNote} />
 </ScrollView>
